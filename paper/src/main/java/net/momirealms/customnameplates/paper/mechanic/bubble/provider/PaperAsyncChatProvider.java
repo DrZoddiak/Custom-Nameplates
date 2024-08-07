@@ -54,6 +54,11 @@ public class PaperAsyncChatProvider extends AbstractChatProvider {
     }
 
     @Override
+    public boolean isIgnoring(Player sender, Player receiver) {
+        return false;
+    }
+
+    @Override
     public boolean hasJoinedChannel(Player player, String channelID) {
         return true;
     }

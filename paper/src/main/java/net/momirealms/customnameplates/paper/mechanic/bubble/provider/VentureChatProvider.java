@@ -47,6 +47,11 @@ public class VentureChatProvider extends AbstractChatProvider {
     }
 
     @Override
+    public boolean isIgnoring(Player sender, Player receiver) {
+        return false;
+    }
+
+    @Override
     public boolean hasJoinedChannel(Player player, String channelID) {
         MineverseChatPlayer mcp = MineverseChatAPI.getOnlineMineverseChatPlayer(player);
         return mcp.getCurrentChannel().getName().equals(channelID);

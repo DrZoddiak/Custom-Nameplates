@@ -26,13 +26,14 @@ import net.draycia.carbon.api.users.CarbonPlayer;
 import net.momirealms.customnameplates.api.CustomNameplatesPlugin;
 import net.momirealms.customnameplates.api.manager.BubbleManager;
 import net.momirealms.customnameplates.api.mechanic.bubble.provider.AbstractChatProvider;
-import net.momirealms.customnameplates.api.util.LogUtils;
 import net.momirealms.customnameplates.paper.util.ReflectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.UUID;
 
 public class CarbonChatProvider extends AbstractChatProvider {
 
@@ -83,14 +84,31 @@ public class CarbonChatProvider extends AbstractChatProvider {
     }
 
     @Override
-    public boolean hasJoinedChannel(Player player, String channelID) {
+    public boolean isIgnoring(Player sender, Player receiver) {
+        Bukkit.getLogger().info("Transforming players");
+        CarbonPlayer cPlayer = carbonPlayer(sender.getUniqueId());
+        CarbonPlayer ePlayer = carbonPlayer(receiver.getUniqueId());
+        if (cPlayer == null || ePlayer == null) {
+            return false;
+        }
+        return cPlayer.ignoring(ePlayer);
+    }
+
+    @Nullable
+    CarbonPlayer carbonPlayer(UUID uuid) {
         CarbonPlayer cPlayer = null;
         for (CarbonPlayer carbonPlayer : api.server().players()) {
-            if (carbonPlayer.uuid().equals(player.getUniqueId())) {
+            if (carbonPlayer.uuid().equals(uuid)) {
                 cPlayer = carbonPlayer;
                 break;
             }
         }
+        return cPlayer;
+    }
+
+    @Override
+    public boolean hasJoinedChannel(Player player, String channelID) {
+        CarbonPlayer cPlayer = carbonPlayer(player.getUniqueId());
         if (cPlayer == null) {
             return false;
         }
@@ -107,6 +125,7 @@ public class CarbonChatProvider extends AbstractChatProvider {
     public boolean canJoinChannel(Player player, String channelID) {
         ChannelRegistry registry = api.channelRegistry();
         Object key = ReflectionUtils.getKerFromString(channelID);
+        Bukkit.getLogger().info("Key+Reg:" + key + registry);
         if (key == null) {
             return false;
         }
@@ -117,13 +136,16 @@ public class CarbonChatProvider extends AbstractChatProvider {
             e.printStackTrace();
         }
         if (channel == null) {
-            LogUtils.warn("Channel " + channelID + " doesn't exist.");
+            Bukkit.getLogger().info("Channel " + channelID + " doesn't exist.");
             return false;
         }
         String perm = channel.permission();
         if (perm == null) {
+            Bukkit.getLogger().info("Perm is null -- Allow");
             return true;
         }
+        Bukkit.getLogger().info("Has permission" + player.hasPermission(perm));
+        Bukkit.getLogger().info("Permission : " + perm);
         return player.hasPermission(perm);
     }
 

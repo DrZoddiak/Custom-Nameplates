@@ -46,6 +46,11 @@ public class HuskChatProvider extends AbstractChatProvider {
     }
 
     @Override
+    public boolean isIgnoring(Player sender, Player receiver) {
+        return false;
+    }
+
+    @Override
     public boolean hasJoinedChannel(Player player, String channelID) {
         String channel = BukkitHuskChat.getInstance().getPlayerCache().getPlayerChannel(player.getUniqueId());
         if (channel == null) {

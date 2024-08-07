@@ -51,6 +51,11 @@ public class TrChatProvider extends AbstractChatProvider {
     }
 
     @Override
+    public boolean isIgnoring(Player sender, Player receiver) {
+        return false;
+    }
+
+    @Override
     public boolean hasJoinedChannel(Player player, String channelID) {
         if (TrChat.INSTANCE.api().getChannelManager().getChannel(channelID) instanceof Channel channel) {
             return channel.getListeners().contains(player.getName());

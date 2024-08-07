@@ -42,7 +42,7 @@ dependencies {
     // chat channels
     compileOnly(files("libs/VentureChat-3.7.1.jar"))
     compileOnly(files("libs/TrChat-2.0.11.jar"))
-    compileOnly(files("libs/carbonchat-paper-3.0.0-beta.26.jar"))
+    compileOnly(files("libs/carbonchat-paper-3.0.0-beta.27.jar"))
     compileOnly("net.william278:huskchat:2.7.1")
 
     // api module

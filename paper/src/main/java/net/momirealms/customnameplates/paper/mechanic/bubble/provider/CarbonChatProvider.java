@@ -86,7 +86,6 @@ public class CarbonChatProvider extends AbstractChatProvider {
 
     @Override
     public boolean isIgnoring(Player sender, Player receiver) {
-        Bukkit.getLogger().info("Transforming players");
         CarbonPlayer cPlayer = carbonPlayer(sender.getUniqueId());
         CarbonPlayer ePlayer = carbonPlayer(receiver.getUniqueId());
         if (cPlayer == null || ePlayer == null) {
@@ -135,7 +134,7 @@ public class CarbonChatProvider extends AbstractChatProvider {
             e.printStackTrace();
         }
         if (channel == null) {
-            LogUtils.info("Channel " + channelID + " doesn't exist.");
+            LogUtils.warn("Channel " + channelID + " doesn't exist.");
             return false;
         }
         String perm = channel.permission();

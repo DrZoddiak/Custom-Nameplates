@@ -350,12 +350,13 @@ public class BubbleManagerImpl implements BubbleManager, Listener {
         StaticTextEntity entity = tagEntity.addTag(StaticTextTagSetting.builder()
                 .leaveRule((p, e) -> true)
                 .comeRule((p, e) -> {
+                    if ((e instanceof Player) && chatProvider.isIgnoring(p, (Player) e)) {
+                        return false;
+                    }
+
                     switch (channelMode) {
                         case ALL -> {
-                            if (!(e instanceof Player)) {
-                                return true;
-                            }
-                            return !chatProvider.isIgnoring(p, (Player) e);
+                            return true;
                         }
                         case JOINED -> {
                             return channel == null || chatProvider.hasJoinedChannel(p, channel);

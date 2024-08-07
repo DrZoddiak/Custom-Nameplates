@@ -352,7 +352,10 @@ public class BubbleManagerImpl implements BubbleManager, Listener {
                 .comeRule((p, e) -> {
                     switch (channelMode) {
                         case ALL -> {
-                            return true;
+                            if (!(e instanceof Player)) {
+                                return true;
+                            }
+                            return !chatProvider.isIgnoring(p, (Player) e);
                         }
                         case JOINED -> {
                             return channel == null || chatProvider.hasJoinedChannel(p, channel);

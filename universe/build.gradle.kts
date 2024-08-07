@@ -1,3 +1,7 @@
+plugins {
+    id("xyz.jpenilla.run-paper") version "2.3.0"
+}
+
 dependencies {
     implementation(project(":api"))
     implementation(project(":common"))
@@ -20,5 +24,8 @@ tasks {
         relocate ("org.bson", "net.momirealms.customnameplates.libraries.bson")
         relocate ("dev.jorel.commandapi", "net.momirealms.customnameplates.libraries.commandapi")
         relocate ("dev.dejvokep.boostedyaml", "net.momirealms.customnameplates.libraries.boostedyaml")
+    }
+    runServer {
+        minecraftVersion("1.21")
     }
 }

@@ -33,6 +33,8 @@ public abstract class AbstractChatProvider implements Listener {
 
     public abstract void unregister();
 
+    public abstract boolean isIgnoring(Player sender, Player receiver);
+
     public abstract boolean hasJoinedChannel(Player player, String channelID);
 
     public abstract boolean canJoinChannel(Player player, String channelID);

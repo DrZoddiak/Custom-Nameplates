@@ -26,6 +26,7 @@ import net.draycia.carbon.api.users.CarbonPlayer;
 import net.momirealms.customnameplates.api.CustomNameplatesPlugin;
 import net.momirealms.customnameplates.api.manager.BubbleManager;
 import net.momirealms.customnameplates.api.mechanic.bubble.provider.AbstractChatProvider;
+import net.momirealms.customnameplates.api.util.LogUtils;
 import net.momirealms.customnameplates.paper.util.ReflectionUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -113,10 +114,9 @@ public class CarbonChatProvider extends AbstractChatProvider {
             return false;
         }
         ChatChannel selectedChannel = cPlayer.selectedChannel();
-        if (selectedChannel == null) {
-            return false;
-        }
-        Object key = getChannelKey(selectedChannel);
+        ChatChannel currentChannel = selectedChannel != null ? selectedChannel : api.channelRegistry().defaultChannel();
+
+        Object key = getChannelKey(currentChannel);
         String str = ReflectionUtils.getKeyAsString(key);
         return str.equals(channelID);
     }
@@ -125,7 +125,6 @@ public class CarbonChatProvider extends AbstractChatProvider {
     public boolean canJoinChannel(Player player, String channelID) {
         ChannelRegistry registry = api.channelRegistry();
         Object key = ReflectionUtils.getKerFromString(channelID);
-        Bukkit.getLogger().info("Key+Reg:" + key + registry);
         if (key == null) {
             return false;
         }
@@ -136,16 +135,13 @@ public class CarbonChatProvider extends AbstractChatProvider {
             e.printStackTrace();
         }
         if (channel == null) {
-            Bukkit.getLogger().info("Channel " + channelID + " doesn't exist.");
+            LogUtils.info("Channel " + channelID + " doesn't exist.");
             return false;
         }
         String perm = channel.permission();
         if (perm == null) {
-            Bukkit.getLogger().info("Perm is null -- Allow");
             return true;
         }
-        Bukkit.getLogger().info("Has permission" + player.hasPermission(perm));
-        Bukkit.getLogger().info("Permission : " + perm);
         return player.hasPermission(perm);
     }
 
